@@ -34,15 +34,20 @@ public class MyUI extends UI {
 	protected void init(VaadinRequest vaadinRequest) {
 
 		VerticalLayout layout = new VerticalLayout();
+		grid.setColumns("firstName", "lastName", "email");
 		layout.addComponent(grid);
 
-		List<Customer> customers = service.findAll();
-		grid.setContainerDataSource(new BeanItemContainer<>(Customer.class, customers));
-		
+		updateList();
+
 		layout.setSpacing(true);
 		layout.setMargin(true);
 		setContent(layout);
 
+	}
+
+	public void updateList() {
+		List<Customer> customers = service.findAll();
+		grid.setContainerDataSource(new BeanItemContainer<>(Customer.class, customers));
 	}
 
 	@WebServlet(urlPatterns = "/*", name = "MyUIServlet", asyncSupported = true)
