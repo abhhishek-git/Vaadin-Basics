@@ -41,8 +41,14 @@ public class MyUI extends UI {
 					service.findAll(e.getText())));
 		});
 		
+		Button clearFilterTextBtn = new  Button("Clear Filter");
+		clearFilterTextBtn.addClickListener(e -> {
+			filterText.clear();
+			updateList();
+		});
+		
 		grid.setColumns("firstName", "lastName", "email");
-		layout.addComponents(filterText, grid);
+		layout.addComponents(filterText, clearFilterTextBtn, grid);
 
 		updateList();
 
@@ -53,7 +59,7 @@ public class MyUI extends UI {
 	}
 
 	public void updateList() {
-		List<Customer> customers = service.findAll();
+		List<Customer> customers = service.findAll(filterText.getValue());
 		grid.setContainerDataSource(new BeanItemContainer<>(Customer.class, customers));
 	}
 
