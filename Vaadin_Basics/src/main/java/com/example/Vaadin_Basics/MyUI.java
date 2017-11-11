@@ -29,13 +29,20 @@ import com.vaadin.ui.VerticalLayout;
 public class MyUI extends UI {
 	private CustomerService service = CustomerService.getInstance();
 	private Grid grid = new Grid();
+	TextField filterText = new TextField("Filter By Name");
 
 	@Override
 	protected void init(VaadinRequest vaadinRequest) {
 
 		VerticalLayout layout = new VerticalLayout();
+		
+		filterText.addTextChangeListener(e -> {
+			grid.setContainerDataSource(new BeanItemContainer<>(Customer.class, 
+					service.findAll(e.getText())));
+		});
+		
 		grid.setColumns("firstName", "lastName", "email");
-		layout.addComponent(grid);
+		layout.addComponents(filterText, grid);
 
 		updateList();
 
