@@ -34,6 +34,7 @@ public class MyUI extends UI {
 	private CustomerService service = CustomerService.getInstance();
 	private Grid grid = new Grid();
 	TextField filterText = new TextField();
+	private CustomerForm form = new CustomerForm(this);
 
 	@Override
 	protected void init(VaadinRequest vaadinRequest) {
@@ -57,13 +58,30 @@ public class MyUI extends UI {
 		filtering.addComponents(filterText, clearFilterTextBtn);
 		
 		grid.setColumns("firstName", "lastName", "email");
-		layout.addComponents(filtering, grid);
+		
+		HorizontalLayout main = new HorizontalLayout(grid, form);
+		main.setSpacing(true);
+		main.setSizeFull();
+		grid.setSizeFull();
+		main.setExpandRatio(grid, 1);
+		layout.addComponents(filtering, main);
 
 		updateList();
 
 		layout.setSpacing(true);
 		layout.setMargin(true);
 		setContent(layout);
+		
+		form.setVisible(false);
+		
+		grid.addSelectionListener(event -> {
+			if(event.getSelected().isEmpty()) {
+				form.setVisible(false);
+			}else {
+				Customer customer = (Customer) event.getSelected().iterator().next();
+				form.setCustomer(customer);
+			}
+		});
 
 	}
 
